@@ -8,8 +8,9 @@
 #include "fr_forward.h"
 #include "fr_flash.h"
 
-const char* ssid = "MyRedNote";
-const char* password = "itera123";
+// Change this line based on your WiFi connection
+const char* ssid = "CCTV";
+const char* password = "jvstaipei";
 
 #define ENROLL_CONFIRM_TIMES 5
 #define FACE_ID_SAVE_NUMBER 7
@@ -226,6 +227,7 @@ static esp_err_t delete_all_faces(WebsocketsClient &client)
   client.send("delete_faces");
 }
 
+// This function is very important for CAPTURING and RECOGNIZE faces 
 void handle_message(WebsocketsClient &client, WebsocketsMessage msg)
 {
   if (msg.data() == "stream") {
@@ -275,7 +277,7 @@ void loop() {
   out_res.image = image_matrix->item;
 
   send_face_list(client);
-  client.send("STREAMING");
+  client.send("STREAMING"); 
   
   while (client.available()) {
     client.poll();
@@ -285,7 +287,8 @@ void loop() {
     }
 
     fb = esp_camera_fb_get();
-    g_state = START_RECOGNITION;
+    // try to set RECOGNITION as default value for device state
+    // g_state = START_RECOGNITION;
 
     if (g_state == START_DETECT || g_state == START_ENROLL || g_state == START_RECOGNITION)
     {
@@ -324,7 +327,8 @@ void loop() {
 
             }
           }
-
+          
+          // RECOGNITION button is pressed and face are detected
           if (g_state == START_RECOGNITION  && (st_face_list.count > 0))
           {
             face_id_node *f = recognize_face_with_name(&st_face_list, out_res.face_id);
@@ -332,7 +336,7 @@ void loop() {
             {
               char recognised_message[64];
               sprintf(recognised_message, "WELCOME %s", f->id_name);
-              // try to print person name
+              // try to print person name detected by ESPCAM
               Serial.println("Welcome on board ");
               Serial.println(f->id_name);
               open_door(client);
