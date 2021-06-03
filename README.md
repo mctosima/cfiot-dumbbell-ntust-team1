@@ -1,5 +1,3 @@
-[![Smart Dumbbell](https://raw.githubusercontent.com/cfiot-team1/smartdumbbell/main/7edf181d6e764ee1b369f5a880a7aa60.png "Smart Dumbbell")](https://raw.githubusercontent.com/cfiot-team1/smartdumbbell/main/7edf181d6e764ee1b369f5a880a7aa60.png "Smart Dumbbell")
-
 # Smart Dumbbell
 *This is a student project of Cloud and Fog Internet of Things course, National Taiwan University of Science and Technology, Taiwan Tech, Taipei, Taiwan, Spring 2021*
 
