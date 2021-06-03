@@ -9,8 +9,5 @@ Team 1 - NTUST CFIoT Team 2021
 -  王瑜伽 I Wayan Wiprayoga Wisesa (D10902811)
 - 馬努朗 Martin Clinton Manullang (D10902809)
 
-## Project Git URL
-https://github.com/cfiot-team1/smartdumbbell
-
 
 
