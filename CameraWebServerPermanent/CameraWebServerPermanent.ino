@@ -7,10 +7,22 @@
 #include "fd_forward.h"
 #include "fr_forward.h"
 #include "fr_flash.h"
+//#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
 
 // Change this line based on your WiFi connection
-const char* ssid = "CCTV";
-const char* password = "jvstaipei";
+const char* ssid = "Martin's iPhone";
+const char* password = "abcd1234";
+
+char* mqtt_server = "140.118.25.64";
+int mqtt_port = 21883 ;
+char* mqtt_clientID = "ESP32Node_1622788391";
+char* mqtt_username = "012dc4009a4c47a599";
+char* mqtt_password = "r:6d90c293e86a4450a1";
+char* mqtt_publish_topic = "qiot/things/Team1/ESP32Node/UserID";
+
+WiFiClient espClient;
+PubSubClient client2(espClient);
 
 #define ENROLL_CONFIRM_TIMES 5
 #define FACE_ID_SAVE_NUMBER 7
@@ -82,7 +94,7 @@ typedef enum
   ENROLL_COMPLETE,
   DELETE_ALL,
 } en_fsm_state;
-en_fsm_state g_state;
+en_fsm_state g_state=START_RECOGNITION;
 
 typedef struct
 {
@@ -91,6 +103,22 @@ typedef struct
 
 httpd_resp_value st_name;
 
+void reconnect() {
+  while (!client2.connected()) {
+    Serial.println("Attempting MQTT");
+
+    if (client2.connect(mqtt_clientID,mqtt_username,mqtt_password)){
+      Serial.println("Connected");
+    }
+    else {
+      Serial.print("Failed, RC=");
+      Serial.print(client2.state());
+      Serial.println("Try Again ...");
+      delay(1000);
+    }
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(true);
@@ -98,6 +126,8 @@ void setup() {
 
   digitalWrite(relay_pin, LOW);
   pinMode(relay_pin, OUTPUT);
+
+  client2.setServer(mqtt_server, mqtt_port);
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -278,7 +308,7 @@ void loop() {
 
   send_face_list(client);
   client.send("STREAMING"); 
-  
+
   while (client.available()) {
     client.poll();
 
@@ -341,6 +371,14 @@ void loop() {
               Serial.println(f->id_name);
               open_door(client);
               client.send(recognised_message);
+              if (!client2.connected()){
+                reconnect();
+              }
+
+              client2.loop();
+              Serial.printf("publishing %s\n", f->id_name);
+              client2.publish(mqtt_publish_topic, f->id_name);
+              
             }
             else
             {
