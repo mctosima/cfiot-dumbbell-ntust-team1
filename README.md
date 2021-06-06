@@ -1,4 +1,4 @@
-#Code Explanation
+# Code Explanation
 1. CameraWebServerPermanent : An initial code with webserver and MQTT Send (Yoga & Martin)
 2. FaceDetectionWithoutServer : A code without webserver (auto recognize without pressing the button), no MQTT Send (Ernie)
 3. MQTT + Face Detection wo Server : A Combined between Code 1 and 2, left some errors (Martin)
