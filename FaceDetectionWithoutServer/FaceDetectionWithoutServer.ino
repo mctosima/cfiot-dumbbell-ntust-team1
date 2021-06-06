@@ -4,7 +4,6 @@
 #include "fd_forward.h"
 #include "fr_forward.h"
 #include "fr_flash.h"
-#include "camera_pins.h"
 
 #define ENROLL_CONFIRM_TIMES 5
 #define FACE_ID_SAVE_NUMBER 7
@@ -13,6 +12,7 @@
 //#define CAMERA_MODEL_WROVER_KIT
 //#define CAMERA_MODEL_ESP_EYE
 #define CAMERA_MODEL_AI_THINKER
+#include "camera_pins.h"
 
 // Change this line based on your WiFi connection
 /*
