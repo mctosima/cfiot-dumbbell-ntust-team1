@@ -1,3 +1,9 @@
+#Code Explanation
+1. CameraWebServerPermanent : An initial code with webserver and MQTT Send (Yoga & Martin)
+2. FaceDetectionWithoutServer : A code without webserver (auto recognize without pressing the button), no MQTT Send (Ernie)
+3. MQTT + Face Detection wo Server : A Combined between Code 1 and 2, left some errors (Martin)
+4. CameraRecognize : Another code from Yoga which could detect face without a webserver but have to import the images manually on the partition
+
 # Smart Dumbbell
 *This is a student project of Cloud and Fog Internet of Things course, National Taiwan University of Science and Technology, Taiwan Tech, Taipei, Taiwan, Spring 2021*
 
