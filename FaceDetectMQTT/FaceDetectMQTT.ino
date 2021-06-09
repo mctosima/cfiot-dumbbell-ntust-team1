@@ -1,5 +1,3 @@
-#include <ArduinoWebsockets.h>
-#include "Arduino.h"
 #include "esp_timer.h"
 #include "esp_camera.h"
 #include "camera_index.h"
@@ -7,22 +5,22 @@
 #include "fr_forward.h"
 #include "fr_flash.h"
 #include <PubSubClient.h>
-
-
+#include <ArduinoWebsockets.h>
 #define ENROLL_CONFIRM_TIMES 5
 #define FACE_ID_SAVE_NUMBER 7
 
 // Select camera model
-// #define CAMERA_MODEL_WROVER_KIT
+//#define CAMERA_MODEL_WROVER_KIT
 #define CAMERA_MODEL_ESP_EYE
-// #define CAMERA_MODEL_AI_THINKER
- #include "camera_pins.h"
+//#define CAMERA_MODEL_AI_THINKER
+#include "camera_pins.h"
 
 // Change this line based on your WiFi connection
-const char* ssid = "CCTV";
-const char* password = "jvstaipei";
 
-// MQTT DETAILS
+const char ssid[] = "Martin's iPhone";
+const char password[] = "abcd1234";
+
+// MQTT CONFIGURATION
 char* mqtt_server = "140.118.25.64";
 int mqtt_port = 21883 ;
 char* mqtt_clientID = "ESP32Node_1622788391";
@@ -31,13 +29,15 @@ char* mqtt_password = "r:6d90c293e86a4450a1";
 char* mqtt_publish_topic = "qiot/things/Team1/ESP32Node/UserID";
 
 WiFiClient espClient;
-PubSubClient client2(espClient);
+PubSubClient client(espClient);
 
 camera_fb_t * fb = NULL;
 
 long current_millis;
 long last_detected_millis = 0;
+
 bool face_recognised = false;
+
 void app_facenet_main();
 
 typedef struct
@@ -90,28 +90,28 @@ typedef struct
 httpd_resp_value st_name;
 
 void reconnect() {
-while (!client2.connected()) {
-  Serial.println("Attempting MQTT");
+  while (!client.connected()) {
+    Serial.println("Attempting MQTT");
 
-  if (client2.connect(mqtt_clientID,mqtt_username,mqtt_password)){
-    Serial.println("Connected");
+    if (client.connect(mqtt_clientID,mqtt_username,mqtt_password)){
+      Serial.println("Connected");
+    }
+    else {
+      Serial.print("Failed, RC=");
+      Serial.print(client.state());
+      Serial.println("Try Again ...");
+      delay(1000);
+    }
   }
-  else {
-    Serial.print("Failed, RC=");
-    Serial.print(client2.state());
-    Serial.println("Try Again ...");
-    delay(1000);
-  }
-}
 }
 
 void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(true);
   Serial.println();
-  // MQTT set server
-  client2.setServer(mqtt_server, mqtt_port);
 
+  client.setServer(mqtt_server, mqtt_port);
+  
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer = LEDC_TIMER_0;
@@ -164,7 +164,7 @@ void setup() {
   s->set_hmirror(s, 1);
 #endif
 
-  /*
+ 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -172,7 +172,7 @@ void setup() {
   }
   Serial.println("");
   Serial.println("WiFi connected");
-  */
+ 
   
   app_facenet_main();
   
@@ -319,15 +319,14 @@ void loop() {
               char recognised_message[64];
               sprintf(recognised_message, "WELCOME %s", f->id_name);
               Serial.println(recognised_message);
-              
-              // Another MQTT
-              if (!client2.connected()){
-              reconnect();
+              if (!client.connected()){
+                reconnect();
               }
 
-            client2.loop();
-            Serial.printf("publishing %s\n", f->id_name);
-            client2.publish(mqtt_publish_topic, f->id_name);
+              client.loop();
+              Serial.printf("publishing %s\n", f->id_name);
+              client.publish(mqtt_publish_topic, f->id_name);
+            
             
             }
             else

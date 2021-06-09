@@ -10,15 +10,15 @@
 
 // Select camera model
 //#define CAMERA_MODEL_WROVER_KIT
-//#define CAMERA_MODEL_ESP_EYE
-#define CAMERA_MODEL_AI_THINKER
+#define CAMERA_MODEL_ESP_EYE
+//#define CAMERA_MODEL_AI_THINKER
 #include "camera_pins.h"
 
 // Change this line based on your WiFi connection
-/*
-const char ssid[] = "";
-const char password[] = "";
-*/
+
+const char ssid[] = "Martin's iPhone";
+const char password[] = "abcd1234";
+
 
 camera_fb_t * fb = NULL;
 
