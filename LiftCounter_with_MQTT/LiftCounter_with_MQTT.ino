@@ -35,6 +35,7 @@
 // ================================================================
 #define I2C_SDA 15
 #define I2C_SCL 13
+#define BUZZER 14
 
 // ================================================================
 // ===                  Enrollment variables                    ===
@@ -46,25 +47,48 @@
 // ===     Change this line based on your WiFi connection       ===
 // ================================================================
 /*
-const char ssid[] = "";
-const char password[] = "";
+const char ssid[] = "BEST@LAB";
+const char password[] = "bestlab1234";
 */
+
+const char ssid[] = "Factory2_2.4G";
+const char password[] = "118factory2";
+
+/*
 const char ssid[] = "Martin's iPhone";
 const char password[] = "abcd1234";
-
+*/
 // ================================================================
 // ===                   MQTT configuration                     ===
 // ================================================================
+
 char* mqtt_server = "140.118.25.64";
 int mqtt_port = 21883 ;
-char* mqtt_clientID = "ESP32Node_1622788391";
+char* mqtt_clientID = "ESP32Node_1624252594";
 char* mqtt_username = "012dc4009a4c47a599";
 char* mqtt_password = "r:6d90c293e86a4450a1";
 char* mqtt_publish_topic = "qiot/things/Team1/ESP32Node/UserID";
 char* mqtt_repetition_topic = "qiot/things/Team1/ESP32Node/Rep";
+/*
+char* mqtt_server = "192.168.1.2";
+int mqtt_port = 21883 ;
+char* mqtt_clientID = "dumbell2_1624095647";
+char* mqtt_username = "85d628ed-3728-4105-8169-546663e12515";
+char* mqtt_password = "r:38f97d548338ef8ac14e8e4290238dde";
+char* mqtt_publish_topic = "qiot/things/admin/dumbell2/UserID";
+char* mqtt_repetition_topic = "qiot/things/admin/dumbell2/Rep";
+*/
+char* mqtt_server_2 = "192.168.50.150";
+int mqtt_port_2 = 1883 ;
+char* mqtt_clientID_2 = "dumbell2_1624095647";
+char* mqtt_username_2 = "ntust";
+char* mqtt_password_2 = "ntustee";
+char* mqtt_publish_topic_2 = "smartgym/dumbell1/user";
+char* mqtt_repetition_topic_2 = "smartgym/dumbell1/repetition";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+PubSubClient client2(espClient);
 
 // ================================================================
 // ===                   Camera initializtion                   ===
@@ -127,14 +151,30 @@ httpd_resp_value st_name;
 
 void reconnect() {
   while (!client.connected()) {
-    Serial.println("Attempting MQTT");
+    Serial.println("Attempting MQTT to QNAP");
 
     if (client.connect(mqtt_clientID,mqtt_username,mqtt_password)){
-      Serial.println("Connected");
+      Serial.println("Connected to QNAP");
     }
     else {
-      Serial.print("Failed, RC=");
+      Serial.print("Failed QNAP, RC=");
       Serial.print(client.state());
+      Serial.println("Try Again ...");
+      delay(1000);
+    }
+  }
+}
+
+void reconnect_2() {
+  while (!client2.connected()) {
+    Serial.println("Attempting MQTT to RPi");
+
+    if (client2.connect(mqtt_clientID_2, mqtt_username_2, mqtt_password_2)){
+      Serial.println("Connected to RPi");
+    }
+    else {
+      Serial.print("Failed Rpi, RC=");
+      Serial.print(client2.state());
       Serial.println("Try Again ...");
       delay(1000);
     }
@@ -177,16 +217,42 @@ void dmpDataReady(void* arg) {
 int lift_counter;
 bool Top, Bottom;
 bool RECOGNISED;
+int lift_left;
+
+struct user {
+  //String user_name;
+  char* user_name;
+  int lift_left; 
+};
+
+user usr[5];
 
 void setup() {
   Serial.begin(115200);
-  Serial.setDebugOutput(true);
+  //Serial.setDebugOutput(true);
   Serial.println(F("Initializing Camera..."));
 
-  client.setServer(mqtt_server, mqtt_port);
+  Serial.println(F("Initializing Server..."));
+  //client.setServer(mqtt_server, mqtt_port);
+  client2.setServer(mqtt_server_2, mqtt_port_2);
+  //reconnect();
+  //reconnect_2();
   
   RECOGNISED = false;
 
+  usr[0].user_name = "Ernie";
+  usr[0].lift_left = 10;
+  usr[1].user_name = "Martin";
+  usr[1].lift_left = 15;
+  usr[2].user_name = "Yoga";
+  usr[2].lift_left = 20;
+  usr[3].user_name = "Bernard";
+  usr[3].lift_left = 10;
+  usr[4].user_name = "John";
+  usr[4].lift_left = 25;
+
+  pinMode(BUZZER, OUTPUT);
+  
 // ================================================================
 // ===                       Camera Setup                       ===
 // ================================================================
@@ -379,6 +445,10 @@ static esp_err_t delete_all_faces()
 }
 
 void loop() {
+
+  //client.loop();
+  //client2.loop();
+  
   if (RECOGNISED == false) {
     dl_matrix3du_t *image_matrix = dl_matrix3du_alloc(1, 320, 240, 3);
     http_img_process_result out_res = {0};
@@ -410,27 +480,6 @@ void loop() {
               lcd.setCursor(0,0);
               lcd.print("FACE DETECTED");
             }
-            
-            /*
-            if (g_state == START_ENROLL)
-            {
-              int left_sample_face = do_enrollment(&st_face_list, out_res.face_id);
-              char enrolling_message[64];
-              sprintf(enrolling_message, "SAMPLE NUMBER %d FOR %s", ENROLL_CONFIRM_TIMES - left_sample_face, st_name.enroll_name);
-              Serial.println(enrolling_message);
-              if (left_sample_face == 0)
-              {
-                ESP_LOGI(TAG, "Enrolled Face ID: %s", st_face_list.tail->id_name);
-                g_state = START_STREAM;
-                char captured_message[64];
-                sprintf(captured_message, "FACE CAPTURED FOR %s", st_face_list.tail->id_name);
-                Serial.println(captured_message);
-                send_face_list();
-  
-              }
-            }
-            */
-            
             // RECOGNITION button is pressed and face are detected
             if (g_state == START_RECOGNITION  && (st_face_list.count > 0))
             {
@@ -438,26 +487,41 @@ void loop() {
               if (f)
               {
                 char recognised_message[64];
-                sprintf(recognised_message, "WELCOME %s", f->id_name, "!");
-                Serial.println(recognised_message);
+                char counter_message[16];
 
+                /*
                 if (!client.connected()){
-                  reconnect();
+                    reconnect();
                 }
-  
-                client.loop();
+                */
+                
+                if (!client2.connected()){
+                    reconnect_2();
+                }
+                
+                //client.loop();
+                client2.loop();
+
                 Serial.printf("publishing %s\n", f->id_name);
-                client.publish(mqtt_publish_topic, f->id_name);
+                //client.publish(mqtt_publish_topic, f->id_name);
+                client2.publish(mqtt_publish_topic_2, f->id_name);
                 
                 lcd.clear();
                 lcd.setCursor(0,0);
+
+                for(int i=0 ; i<5 ; ++i){
+                  if (!strcmp(usr[i].user_name, f->id_name)){
+                    lift_left = usr[i].lift_left;
+                  }
+                }
+                
+                sprintf(recognised_message, "%-7s: %2s left", f->id_name, String(lift_left));
                 lcd.print(recognised_message);
                 
                 lcd.setCursor(0,1);
-                lcd.print("Lifted ");
-                lcd.print(lift_counter);
-                lcd.print(" times!");
-
+                sprintf(counter_message, "Lifted %2s times", String(lift_counter));
+                lcd.print(counter_message);
+                
                 RECOGNISED = true;
                 
                 delay(2000);
@@ -473,7 +537,6 @@ void loop() {
             }
             dl_matrix3d_free(out_res.face_id);
           }
-  
         }
         else
         {
@@ -515,12 +578,12 @@ void loop() {
       Serial.print("\t");
       Serial.println(aaReal.z);
       */
-      if (aaReal.z > 1000) {
+      if (aaReal.z > 500) {
         Top = true;
         Bottom = false;
       }
 
-      if (aaReal.z < -1000) {
+      if (aaReal.z < -500) {
         Bottom = true;
       }
 
@@ -528,19 +591,63 @@ void loop() {
         Top = false;
         Bottom = false;
 
+        char lift_message[16];
+
         lift_counter++;
-        
+        lift_left--;
         char buf[10];
-        String lift_times = String(lift_counter);
-        lift_times.toCharArray(buf, 10);
-        client.publish(mqtt_repetition_topic, buf);
+        if (lift_left > 0) {
+          /*
+          if (!client.connected()){
+              reconnect();
+          }
         
-        lcd.setCursor(7,1);
-        lcd.print(lift_counter);
-        lcd.print(" times!");
-        Serial.println(lift_counter);
+          client.loop();
+          */
+          String lift_times = String(lift_counter);
+          lift_times.toCharArray(buf, 10);
+          //client.publish(mqtt_repetition_topic, buf);
+          
+          digitalWrite(BUZZER, HIGH);
+          lcd.setCursor(9,0);
+          sprintf(lift_message, "%2s left", String(lift_left));
+          lcd.print(lift_message);
+          
+          lcd.setCursor(7,1);
+          lcd.print(lift_counter);
+          lcd.print(" times!");
+          Serial.println(lift_counter);
+          delay(200);
+          digitalWrite(BUZZER, LOW);
+        }
+        else {
+          
+          if (!client2.connected()){
+              reconnect_2();
+          }
+          client2.loop();
+          
+          
+          String lift_times = String(lift_counter);
+          lift_times.toCharArray(buf, 10);
+          //client.publish(mqtt_repetition_topic, buf);
+          client2.publish(mqtt_repetition_topic_2, buf);
+          
+          lcd.clear();
+          lcd.setCursor(0,0);
+          lcd.print("Training Finish!");
+          lcd.setCursor(0,1);
+          lcd.print("Congratulations!");
+          digitalWrite(BUZZER, HIGH);
+          delay(1000);
+          digitalWrite(BUZZER, LOW);
+          delay(5000);
+          
+          RECOGNISED = false;
+          lift_counter = 0;
+          lift_left = 0;
+        }
       }
-      delay(100);
     }
   }
 }
