@@ -19,6 +19,11 @@ Team 1 - NTUST CFIoT Team 2021
 ## Architecture
 <img width="626" alt="Screen Shot 2021-06-21 at 22 29 46" src="https://user-images.githubusercontent.com/22334778/122779222-40680c00-d2e0-11eb-9180-9c5c9d0c9125.png">
 
+## JSON
+<img width="367" alt="JSON" src="https://user-images.githubusercontent.com/22334778/122839666-0d973580-d32b-11eb-9dc9-df9bfd46b001.png">
+
+
+
 
 
 
