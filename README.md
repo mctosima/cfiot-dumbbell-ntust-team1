@@ -8,9 +8,6 @@
 # Smart Dumbbell
 *This is a student project of Cloud and Fog Internet of Things course, National Taiwan University of Science and Technology, Taiwan Tech, Taipei, Taiwan, Spring 2021*
 
-# Video Demo
-<iframe width="560" height="315" src="https://www.youtube.com/embed/8GxmKBJc71A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ## Team Member
 Team 1 - NTUST CFIoT Team 2021
 - 江承翰 John (B10632040)
@@ -21,6 +18,9 @@ Team 1 - NTUST CFIoT Team 2021
 
 ## Architecture
 <img width="626" alt="Screen Shot 2021-06-21 at 22 29 46" src="https://user-images.githubusercontent.com/22334778/122779222-40680c00-d2e0-11eb-9180-9c5c9d0c9125.png">
+
+## Video Demo
+[![Video Demo](https://img.youtube.com/vi/8GxmKBJc71A/0.jpg)](https://www.youtube.com/watch?v=8GxmKBJc71A)
 
 ## Node-Red Configuration
 <img width="367" alt="JSON" src="https://user-images.githubusercontent.com/22334778/122839666-0d973580-d32b-11eb-9dc9-df9bfd46b001.png">
