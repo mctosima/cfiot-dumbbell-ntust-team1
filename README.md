@@ -4,7 +4,7 @@
 3. MQTT + Face Detection wo Server : A Combined between Code 1 and 2, left some errors (Martin)
 4. CameraRecognize : Another code from Yoga which could detect face without a webserver but have to import the images manually on the partition
 5. FaceRecog_with_LiftCounter : A combination between local version of face recognition and lift counter, no MQTT Send (Ernie)
-6. Node-Red-Flow : A JSON file that deal with the received messages and also send QUERY messages to AWS database, the testing flow is also included (John)
+6. Node-Red-Flow : The Node-Red flow that deal with the received messages and also send QUERY messages to AWS database, the testing flow is also included (John)
 
 # Smart Dumbbell
 *This is a student project of Cloud and Fog Internet of Things course, National Taiwan University of Science and Technology, Taiwan Tech, Taipei, Taiwan, Spring 2021*
