@@ -32,6 +32,8 @@ Report Chart Link : https://docs.google.com/spreadsheets/d/e/2PACX-1vR01pTWsapRv
 ## Schematic
 ![Lift_Counter_bb](https://user-images.githubusercontent.com/22334778/122847497-63bfa500-d33a-11eb-815f-ab26f2bb14fb.jpg)
 
+## Contact
+d01902809@mail.ntust.edu.tw
 
 
 
