@@ -10,7 +10,7 @@
 
 ## Team Member
 Team 1 - NTUST CFIoT Team 2021
-- 江承翰 John (B10632040)
+- 江承翰 John Chiang (B10632040)
 - 蘇于銨 Ernie Su (B10632006)
 - Bernard Mwangi (D10915815)
 -  王瑜伽 I Wayan Wiprayoga Wisesa (D10902811)
