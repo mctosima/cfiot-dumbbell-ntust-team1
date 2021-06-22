@@ -25,6 +25,8 @@ Team 1 - NTUST CFIoT Team 2021
 ## Node-Red Configuration
 <img width="367" alt="JSON" src="https://user-images.githubusercontent.com/22334778/122839666-0d973580-d32b-11eb-9dc9-df9bfd46b001.png">
 
+## Schematic
+![Lift_Counter_bb](https://user-images.githubusercontent.com/22334778/122847497-63bfa500-d33a-11eb-815f-ab26f2bb14fb.jpg)
 
 
 
