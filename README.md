@@ -19,9 +19,8 @@ Team 1 - NTUST CFIoT Team 2021
 
 ## Architecture
 <img width="626" alt="Screen Shot 2021-06-21 at 22 29 46" src="https://user-images.githubusercontent.com/22334778/122779222-40680c00-d2e0-11eb-9180-9c5c9d0c9125.png">
-[Google Sheet Link](https://docs.google.com/spreadsheets/d/1kOLyi5Gj4014HxtFdDBxpM_J4166p6QUqVq4vnk0PhQ/edit?usp=sharing)
-	[Google](https://www.google.com) - _Google | Youtube | Gmail | Maps | PlayStore | GoogleDrive_
-
+Google Sheet Link : https://docs.google.com/spreadsheets/d/1kOLyi5Gj4014HxtFdDBxpM_J4166p6QUqVq4vnk0PhQ/edit?usp=sharing
+Report Chart Link : https://docs.google.com/spreadsheets/d/e/2PACX-1vR01pTWsapRvk7gbU8aj-Mbrk1G18UPNKgwpfoODO0Ckaw7PT7FE7N6Ca1zXW5Cc5hborvGkarTQgdp/pubchart?oid=449196660&format=interactive
 
 ## Video Demo
 [![Video Demo](https://img.youtube.com/vi/8GxmKBJc71A/0.jpg)](https://www.youtube.com/watch?v=8GxmKBJc71A)
